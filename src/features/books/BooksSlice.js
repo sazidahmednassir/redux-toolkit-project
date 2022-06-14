@@ -1,9 +1,10 @@
 const { createSlice } = require("@reduxjs/toolkit");
+const { v4: uuidv4 } = require("uuid");
 
 const initialBooks = {
     books: [
-      { id: 1, title: "Love Bangladesh", author: "Anisul Islam" },
-      { id: 2, title: "Bangladeshi", author: "Anisul Islam" },
+      { id: uuidv4(), title: "Love Bangladesh", author: "Anisul Islam" },
+      { id:  uuidv4(), title: "Bangladeshi", author: "Anisul Islam" },
     ],
   };
   
@@ -14,6 +15,18 @@ const initialBooks = {
       showBooks: (state) => state,
       addBook: (state, action) => {
         state.books.push(action.payload);
+      },
+      updateBook: (state, action) => {
+        const { id, title, author } = action.payload;
+        const isBookExist = state.books.find((book) => book.id === id);
+        if (isBookExist) {
+          isBookExist.title = title;
+          isBookExist.author = author;
+        }
+      },
+      deleteBook: (state, action) => {
+        const id = action.payload;
+        state.books = state.books.filter((book) => book.id !== id);
       },
     }
 
